@@ -1,130 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ElimuHub — Tuition Package Generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-  <meta name="description" content="ElimuHub Tuition Package Generator — create, preview and export customized tuition packages." />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElimuHub Tuition Packages</title>
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-  <div class="container">
     <header>
-      <div class="logo">
-        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
-        <div>
-          <div class="company-name">ELIMUHUB EDUCATION CONSULTANTS</div>
-          <div class="document-title">Tuition Package Generator</div>
-        </div>
-      </div>
-      <p>Create reusable, client-ready tuition packages and pricing calculations.</p>
+        <h1>ElimuHub Education Consultants</h1>
+        <p>Customized Tuition Packages</p>
     </header>
+    
+    <main>
+        <section id="interactive-package">
+            <h2>📚 Select Your Tuition Package</h2>
+            
+            <div class="form-group">
+                <label for="daysPerWeek">Days per Week:</label>
+                <select id="daysPerWeek">
+                    <option value="5">5 Days</option>
+                    <option value="4">4 Days</option>
+                    <option value="3">3 Days</option>
+                </select>
+            </div>
 
-    <main class="app-grid">
-      <section class="controls">
-        <h2>Package Builder</h2>
+            <div class="form-group">
+                <label for="subjects">Subjects Taught (choose number of subjects):</label>
+                <input type="number" id="subjects" min="1" max="5" value="2">
+            </div>
 
-        <label>Curriculum
-          <select id="curriculum">
-            <option>CBC</option>
-            <option>IGCSE</option>
-            <option>IB</option>
-            <option>8-4-4</option>
-            <option>KCPE</option>
-            <option>KCSE</option>
-            <option>Adult</option>
-          </select>
-        </label>
+            <button id="calculateBtn">Calculate Totals</button>
 
-        <label>Student name
-          <input id="studentName" placeholder="Optional student name" />
-        </label>
+            <div id="results" class="hidden">
+                <h3>Package Totals</h3>
+                <p><strong>Rate per Hour per Subject:</strong> <span id="rate"></span></p>
+                <p><strong>Total per Day:</strong> <span id="totalPerDay"></span></p>
+                <p><strong>Total per Week:</strong> <span id="totalPerWeek"></span></p>
+            </div>
+        </section>
 
-        <label>Mode
-          <select id="mode">
-            <option>Home-Based</option>
-            <option>Online</option>
-          </select>
-        </label>
+        <section id="subjects-info">
+            <h2>🧑‍🏫 Subject Combinations</h2>
+            <ul>
+                <li>Math / Chemistry / Biology</li>
+                <li>History / Geography</li>
+                <li>French</li>
+            </ul>
+        </section>
 
-        <label>Days per week
-          <select id="daysPerWeek">
-            <option value="5">5</option>
-            <option value="4">4</option>
-            <option value="3">3</option>
-          </select>
-        </label>
+        <section id="payment">
+            <h2>💼 Payment Terms</h2>
+            <p>Weekly payments every Friday via Airtel Money — 0731 838387 (James Kibiti). First week upfront, KSh 1,000 service fee included.</p>
+        </section>
 
-        <label>Hours per session
-          <select id="hoursPerSession">
-            <option value="1">1</option>
-            <option value="1.5">1.5</option>
-            <option value="2">2</option>
-          </select>
-        </label>
+        <section id="notes">
+            <h2>🗒️ Notes</h2>
+            <ul>
+                <li>Rotation ensures balanced subject coverage.</li>
+                <li>Client may adjust days/subjects/session duration.</li>
+                <li>Fewer days slightly increase per-subject rate.</li>
+            </ul>
+        </section>
 
-        <label>Subjects (select or type comma-separated)
-          <div class="subjects-row">
-            <select id="subjectSelect">
-              <option>Mathematics</option>
-              <option>Biology</option>
-              <option>Chemistry</option>
-              <option>Physics</option>
-              <option>English</option>
-              <option>Kiswahili</option>
-              <option>History</option>
-              <option>Geography</option>
-              <option>French</option>
-              <option>Accounting</option>
-            </select>
-            <button id="addSubjectBtn" class="btn small">Add</button>
-          </div>
-          <input id="subjectsInput" placeholder="e.g. Mathematics, Biology" />
-          <div id="subjectsList" class="chip-list"></div>
-        </label>
-
-        <div class="pricing-presets">
-          <h3>Pricing Presets</h3>
-          <p>Presets defined by package type (can be changed later in code)</p>
-          <div class="preset-grid">
-            <div class="preset">A (5d/w)<br><strong>KSh 600/hr</strong></div>
-            <div class="preset">B (4d/w)<br><strong>KSh 700/hr</strong></div>
-            <div class="preset">C (3d/w)<br><strong>KSh 800/hr</strong></div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="calcBtn" class="btn">Calculate Package</button>
-          <button id="exportBtn" class="btn outline">Export Markdown</button>
-          <button id="resetBtn" class="btn ghost">Reset</button>
-        </div>
-
-      </section>
-
-      <section class="preview">
-        <h2>Package Preview</h2>
-        <div id="previewArea" class="preview-area">
-          <em>No calculation yet — click "Calculate Package"</em>
-        </div>
-
-        <h3>Table</h3>
-        <div id="tableArea"></div>
-
-        <h3>Generated Docs</h3>
-        <div class="docs">
-          <a id="viewPackagesDoc" class="doc-link" href="docs/packages.md">View packages.md</a>
-        </div>
-      </section>
+        <section id="next-step">
+            <h2>🚀 Next Step</h2>
+            <p>Confirm preferred package and start date/time for tutor assignment.</p>
+        </section>
     </main>
 
     <footer>
-      <p>ElimuHub — contact: 0731 838387 · elimuhubconsultant@gmail.com</p>
+        <p>📞 0731 838387 | ✉️ elimuhubconsultant@gmail.com | 🌐 <a href="https://elimuhub.simdif.com">elimuhub.simdif.com</a></p>
     </footer>
-  </div>
 
-  <script src="js/subject-allocation.js"></script>
-  <script src="js/package-calculator.js"></script>
-  <script src="js/app.js"></script>
+    <script src="scripts/main.js"></script>
 </body>
 </html>
